@@ -42,7 +42,7 @@ loop do # main loop
 
     if valid_number?(number1)
       break
-    else 
+    else
       prompt("Hmm... that doesn't look like a valid number")
     end
   end
@@ -54,7 +54,7 @@ loop do # main loop
 
     if valid_number?(number2)
       break
-    else 
+    else
       prompt("Hmm... that doesn't look like a valid number")
     end
   end
@@ -78,9 +78,9 @@ loop do # main loop
     else
       prompt('Must choose 1, 2, 3 or 4')
     end
-   end
+  end
 
-   prompt("#{operation_to_message(operator)} the two numbers...")
+  prompt("#{operation_to_message(operator)} the two numbers...")
 
   result = case operator
            when '1'
@@ -91,7 +91,7 @@ loop do # main loop
              number1.to_i() * number2.to_i()
            when '4'
              number1.to_f() / number2.to_f()
-  end
+           end
 
   prompt("The result is #{result}")
 

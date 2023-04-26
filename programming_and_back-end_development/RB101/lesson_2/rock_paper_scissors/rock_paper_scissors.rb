@@ -4,17 +4,17 @@ def prompt(message)
   Kernel.puts(">> #{message}")
 end
 
-def won?(first, second)
+def win?(first, second)
   (first == 'rock' && second == 'scissors') ||
     (first == 'paper' && second == 'rock') ||
     (first == 'scissors' && second == 'paper')
 end
 
 def display_results(player, computer)
-  if won?(player, computer)
-    prompt('You won!')
-  elsif won?(computer, player)
-    prompt('Computer won!')
+  if win?(player, computer)
+    prompt("You won!")
+  elsif win?(computer, player)
+    prompt("Computer won!")
   else
     prompt("It's a tie!")
   end
@@ -44,5 +44,4 @@ loop do
   break unless answer.downcase().start_with?('y')
 end
 
-system 'clear'
 prompt('Thank you for playing. Good bye!')

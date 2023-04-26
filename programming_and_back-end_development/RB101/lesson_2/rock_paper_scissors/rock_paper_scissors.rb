@@ -12,11 +12,11 @@ end
 
 def display_results(player, computer)
   if win?(player, computer)
-    prompt("You won!")
+    prompt('You won!')
   elsif win?(computer, player)
-    prompt("Computer won!")
+    prompt('Computer won!')
   else
-    prompt("It's a tie!")
+    prompt('It is a tie!')
   end
 end
 
@@ -29,7 +29,7 @@ loop do
     if VALID_CHOICES.include?(choice)
       break
     else
-      prompt("That's not a valid choice.")
+      prompt('That is not a valid choice.')
     end
   end
 

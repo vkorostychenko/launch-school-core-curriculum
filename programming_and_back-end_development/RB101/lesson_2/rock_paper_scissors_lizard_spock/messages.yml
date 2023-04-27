@@ -1,0 +1,22 @@
+welcome: "Welcome to Rock Paper Scissors Lizard Spock game!"
+rules: |
+    A simple way to remember who wins:
+        Scissors cuts paper
+        Paper covers rock
+        Rock crushes lizard
+        Lizard poiss Spock
+        Spock smashes scissors
+        Scissors decapitates lizard
+        Lizard eats paper
+        Paper disproves Spock
+        Spock vaporizes rock
+        Rock crushes scissors
+invalid_choice: "That is not a valid choice."
+press_enter: "Press enter after typing."
+play_again: "Do you want me to play again?"
+goodbye: "Thank you for playing. Good bye!"
+tie: "It is a tie!"
+player_won: "You won! :-)"
+computer_won: "Computer won!"
+player_winner: "Congratulations! You are the grand winner!"
+computer_winner: "GAME OVER!"

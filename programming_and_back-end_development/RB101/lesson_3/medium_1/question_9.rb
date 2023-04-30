@@ -1,0 +1,1 @@
+# The return value is 'no', because the value returned from 'foo' is always be 'yes'.

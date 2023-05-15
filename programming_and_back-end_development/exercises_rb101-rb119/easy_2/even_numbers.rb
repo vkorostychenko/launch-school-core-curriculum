@@ -1,6 +1,1 @@
-def print_odd(range)
-  range = range.to_a
-  range.each { |num| puts num if num.even? }
-end
-
-print_odd(1..99)
+(1..99).each { |n| puts n if n.even? }

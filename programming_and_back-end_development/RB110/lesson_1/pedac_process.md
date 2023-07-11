@@ -90,21 +90,27 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
 
 **Examples**
 
+```
 row number: 1 --> sum of integers in row: 2
 row number: 2 --> sum of integers in row: 10
 row number: 4 --> sum of integers in row: 68
+```
 
-`2 --> 2`
-`4, 6 --> 10`
-`14, 16, 18, 20 --> 68`
+```
+2 --> 2
+4, 6 --> 10
+14, 16, 18, 20 --> 68
+```
 
 **Data Structures**
 
-`2`
-`4, 6`
-`8, 10, 12`
-`14, 16, 18, 20`
-`....`
+```
+2
+4, 6
+8, 10, 12
+14, 16, 18, 20
+....
+```
 
 - Overall structure representing sequence as a whole
 - Individual rows within overall structure
@@ -146,9 +152,11 @@ Rules:
 
 Examples:
 
-`start: 2, length: 1 --> [2]`
-`start: 4, length: 2 --> [4, 6]`
-`start: 8, length: 3 --> [8, 10, 12]`
+```
+start: 2, length: 1 --> [2]
+start: 4, length: 2 --> [4, 6]
+start: 8, length: 3 --> [8, 10, 12]
+```
 
 Data structures:
 - An array of integers

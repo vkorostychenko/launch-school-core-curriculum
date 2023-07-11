@@ -78,13 +78,15 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
 
 - Sequence:
 
-`2, 4, 6, 8, 10, 12, 14, 16, 18, ...`
+```
+2, 4, 6, 8, 10, 12, 14, 16, 18, ...
 
-`2`
-`4, 6`
-`8, 10, 12`
-`14, 16, 18, 20`
-`...`
+2
+4, 6
+8, 10, 12
+14, 16, 18, 20
+...
+```
 
 - How do we create the structure?
 

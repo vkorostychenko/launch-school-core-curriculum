@@ -68,7 +68,7 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
 - Sequence begins with two
 - Integers are consecutive
 - Sequence is grouped in to rows
-- Each row incrementally larger: 1, 2, 3, ...
+- Each row incrementally larger: `1, 2, 3, ...`
 - Row 'number' equals the number of elements in the row
   - Row 1 has 1 element, row 2 has two elements, ...
 - Input: a single integer
@@ -77,13 +77,14 @@ Imagine a sequence of consecutive even integers beginning with 2. The integers a
   - The sum of the integers in the row identified by the input integer
 
 - Sequence:
-2, 4, 6, 8, 10, 12, 14, 16, 18, ...
 
-2
-4, 6
-8, 10, 12
-14, 16, 18, 20
-...
+`2, 4, 6, 8, 10, 12, 14, 16, 18, ...`
+
+`2`
+`4, 6`
+`8, 10, 12`
+`14, 16, 18, 20`
+`...`
 
 - How do we create the structure?
 
@@ -93,18 +94,17 @@ row number: 1 --> sum of integers in row: 2
 row number: 2 --> sum of integers in row: 10
 row number: 4 --> sum of integers in row: 68
 
-
-2 --> 2
-4, 6 --> 10
-14, 16, 18, 20 --> 68
+`2 --> 2`
+`4, 6 --> 10`
+`14, 16, 18, 20 --> 68`
 
 **Data Structures**
 
-2
-4, 6
-8, 10, 12
-14, 16, 18, 20
-....
+`2`
+`4, 6`
+`8, 10, 12`
+`14, 16, 18, 20`
+`....`
 
 - Overall structure representing sequence as a whole
 - Individual rows within overall structure
@@ -112,6 +112,7 @@ row number: 4 --> sum of integers in row: 68
 - Individual rows contain integers
 - Can assume that integers are in a set order in the context of the sequence
 
+```
 [
   [2],
   [4, 6],
@@ -119,6 +120,7 @@ row number: 4 --> sum of integers in row: 68
   [14, 16, 18, 20],
   ....
 ]
+```
 
 **Algorithm**
 
@@ -143,9 +145,10 @@ Rules:
 - Output: the row itself: `[8, 10, 12]`
 
 Examples:
-start: 2, length: 1 --> [2]
-start: 4, length: 2 --> [4, 6]
-start: 8, length: 3 --> [8, 10, 12]
+
+`start: 2, length: 1 --> [2]`
+`start: 4, length: 2 --> [4, 6]`
+`start: 8, length: 3 --> [8, 10, 12]`
 
 Data structures:
 - An array of integers

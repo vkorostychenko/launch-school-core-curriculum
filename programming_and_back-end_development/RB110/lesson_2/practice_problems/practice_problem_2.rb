@@ -9,7 +9,7 @@ books = [
 ]
 
 sorted_books = books.sort_by do |book|
-                book[:published].to_i
+                 book[:published].to_i
                end
 
 puts sorted_books

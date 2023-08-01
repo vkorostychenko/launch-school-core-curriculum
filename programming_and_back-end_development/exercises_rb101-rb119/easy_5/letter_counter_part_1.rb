@@ -11,7 +11,7 @@ P: Understanding the Problem
     - Input: string
     - Output: hash
   - Implicit requirements:
-    - empty string returns an empty array
+    - empty string returns an empty hash
   - Questions:
 
 E: Examples and Test Cases:

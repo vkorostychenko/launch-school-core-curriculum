@@ -11,6 +11,7 @@ P: Understanding the Problem
     - Input: string
     - Output: hash
   - Implicit requirements:
+    - empty string returns an empty array
   - Questions:
 
 E: Examples and Test Cases:
@@ -21,15 +22,20 @@ E: Examples and Test Cases:
 D: Data Structures:
 A: Algorithms:
   - create an empty result hash
-
+  - crate an array of splitted words from string
+    - iterate over an array of words
+      - replace each word to its length
+  - iterate over an array of unique lengths
+    - count each occurrence of length in lenths
+    - add each length in the result hash as a key with the value of
+      number of its occurrence in lengths array
+  - return the result hash
 =end
 
 def word_sizes(string)
   result = {}
-  sizes = string.split.map do |word|
-    word.size
-  end
-  sizes.each do |size|
+  sizes = string.split.map(&:size)
+  sizes.uniq.each do |size|
     result[size] = sizes.count(size)
   end
   result

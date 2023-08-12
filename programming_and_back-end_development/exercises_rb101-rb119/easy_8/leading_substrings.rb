@@ -5,7 +5,7 @@ order from shortest to longest substring.
 =end
 
 def leading_substrings(str)
-  (0...str.size).map { |sub_length| str[0..sub_length] }
+  (1..str.size).map { |sub_length| str[0, sub_length] }
 end
 
 p leading_substrings('abc') == ['a', 'ab', 'abc']

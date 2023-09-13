@@ -6,14 +6,16 @@ WINNING_LINES = [
 INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
+WIN_SCORE = 5
 
 def prompt(msg)
   puts "=> #{msg}"
 end
 
-# rubocop: disable Metrics/AbcSize
-def display_board(brd)
+# rubocop: disable Metrics/MethodLength, Metrics/AbcSize
+def display_board(brd, score)
   system 'clear'
+  display_score(score)
   puts "You're #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
   puts ''
   puts '     |     |'
@@ -29,7 +31,31 @@ def display_board(brd)
   puts '     |     |'
   puts ''
 end
-# rubocop: enable Metrics/AbcSize
+# rubocop: enable Metrics/MethodLength, Metrics/AbcSize
+
+def display_score(score)
+  puts "Score: Player #{score['Player']} | Computer #{score['Computer']}"
+  puts ''
+end
+
+def display_round_winner(brd)
+  system 'clear'
+  prompt "#{detect_winner(brd)} won this round!"
+  sleep(3)
+end
+
+def display_winner(score, brd)
+  system 'clear'
+  display_score(score)
+  prompt "Game over! #{detect_winner(brd)} won!"
+  sleep(3)
+end
+
+def display_tie
+  system 'clear'
+  prompt "It's a tie!"
+  sleep(3)
+end
 
 def initialise_board
   new_board = {}
@@ -89,25 +115,42 @@ def detect_winner(brd)
   nil
 end
 
+def update_score(score, name)
+  score[name] += 1
+end
+
 loop do
-  board = initialise_board
+  score = { 'Player' => 0, 'Computer' => 0 }
 
+  # play round
   loop do
-    display_board(board)
+    board = initialise_board
+    display_board(board, score)
 
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    # play move
+    loop do
+      display_board(board, score)
 
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-  end
+      player_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
 
-  display_board(board)
+      computer_places_piece!(board)
+      break if someone_won?(board) || board_full?(board)
+    end
 
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "It's a tie!"
+    display_board(board, score)
+
+    if someone_won?(board)
+      display_round_winner(board)
+      update_score(score, detect_winner(board))
+    else
+      display_tie
+    end
+
+    if score.values.include?(WIN_SCORE)
+      display_winner(score, board)
+      break
+    end
   end
 
   prompt 'Play again? (y or n)'

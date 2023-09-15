@@ -18,6 +18,7 @@ def display_board(brd, score)
   system 'clear'
   display_score(score)
   puts "You're #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
+  puts 'First to 5 wins the game.'
   puts ''
   puts '     |     |'
   puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
@@ -86,6 +87,7 @@ def player_places_piece!(brd)
 
   loop do
     prompt "Choose a square (#{joinor(empty_squares(brd))}):"
+    prompt "The count starts from the left top."
     square = gets.chomp.to_i
     break if empty_squares(brd).include?(square)
 
@@ -166,10 +168,7 @@ def random_player
 end
 
 def alternate_player(current_player)
-  case current_player
-  when 'Player'   then 'Computer'
-  when 'Computer' then 'Player'
-  end
+  current_player == 'Player' ? 'Computer' : 'Player'
 end
 
 def place_piece!(brd, current_player)

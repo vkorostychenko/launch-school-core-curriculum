@@ -1,6 +1,3 @@
-require 'pry'
-require 'pry-byebug'
-
 WINNING_LINES = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], # rows
   [1, 4, 7], [2, 5, 8], [3, 6, 9], # colons
@@ -10,6 +7,7 @@ INITIAL_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
 WIN_SCORE = 5
+MID_SQUARE = 5
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -60,6 +58,10 @@ def display_tie
   sleep(3)
 end
 
+def display_invalid_choice
+  prompt "Sorry, that's not a valid choice."
+end
+
 def initialise_board
   new_board = {}
   (1..9).each { |num| new_board[num] = INITIAL_MARKER }
@@ -87,7 +89,7 @@ def player_places_piece!(brd)
     square = gets.chomp.to_i
     break if empty_squares(brd).include?(square)
 
-    prompt "Sorry, that's not a valid choice."
+    display_invalid_choice
   end
 
   brd[square] = PLAYER_MARKER
@@ -95,15 +97,21 @@ end
 
 def computer_places_piece!(brd)
   square = nil
+  markers = [COMPUTER_MARKER, PLAYER_MARKER]
 
-  WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd)
+  markers.each do |marker|
+    WINNING_LINES.each do |line|
+      square = find_at_risk_square(line, brd, marker)
+
+      break if square
+    end
 
     break if square
   end
 
   if !square
-    square = empty_squares(brd).sample
+    square =
+      brd[MID_SQUARE] == INITIAL_MARKER ? MID_SQUARE : empty_squares(brd).sample
   end
 
   brd[square] = COMPUTER_MARKER
@@ -129,16 +137,46 @@ def detect_winner(brd)
   nil
 end
 
-def find_at_risk_square(line, brd)
-  if brd.values_at(*line).count(PLAYER_MARKER) == 2
+def find_at_risk_square(line, brd, marker)
+  if brd.values_at(*line).count(marker) == 2
     brd.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
   end
-
-  nil
 end
 
 def update_score(score, name)
   score[name] += 1
+end
+
+def goes_first
+  loop do
+    prompt 'Who goes first? (1 - Player, 2 - Computer, 3 - Random)'
+    answer = gets.chomp
+
+    case answer
+    when '1' then return 'Player'
+    when '2' then return 'Computer'
+    when '3' then return random_player
+    else display_invalid_choice
+    end
+  end
+end
+
+def random_player
+  ['Player', 'Computer'].sample
+end
+
+def alternate_player(current_player)
+  case current_player
+  when 'Player'   then 'Computer'
+  when 'Computer' then 'Player'
+  end
+end
+
+def place_piece!(brd, current_player)
+  case current_player
+  when 'Player'   then player_places_piece!(brd)
+  when 'Computer' then computer_places_piece!(brd)
+  end
 end
 
 loop do
@@ -148,15 +186,14 @@ loop do
   loop do
     board = initialise_board
     display_board(board, score)
+    current_player = goes_first
 
     # play move
     loop do
       display_board(board, score)
+      place_piece!(board, current_player)
+      current_player = alternate_player(current_player)
 
-      player_places_piece!(board)
-      break if someone_won?(board) || board_full?(board)
-
-      computer_places_piece!(board)
       break if someone_won?(board) || board_full?(board)
     end
 

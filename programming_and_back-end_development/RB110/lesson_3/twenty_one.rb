@@ -1,5 +1,7 @@
 SUITS = ['S', 'D', 'C', 'S']
 VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+WIN_SCORE = 21
+DEALER_MIN_TOTAL = 17
 
 def prompt(msg)
   puts "=>#{msg}"
@@ -26,21 +28,21 @@ def total(cards)
 
   # correct for Aces
   values.select { |value| value == 'A' }.count.times do
-    sum -= 10 if sum > 21
+    sum -= 10 if sum > WIN_SCORE
   end
 
   sum
 end
 
 def busted?(total)
-  total > 21
+  total > WIN_SCORE
 end
 
 # :tie, :dealer, :player, :dealer_busted, :player_busted
 def detect_result(dealer_total, player_total)
-  if player_total > 21
+  if player_total > WIN_SCORE
     :player_busted
-  elsif dealer_total > 21
+  elsif dealer_total > WIN_SCORE
     :dealer_busted
   elsif dealer_total < player_total
     :player
@@ -130,7 +132,7 @@ loop do
   prompt 'Dealer turn...'
 
   loop do
-    break if dealer_total >= 17
+    break if dealer_total >= DEALER_MIN_TOTAL
 
     prompt 'Dealer hits!'
     dealer_cards << deck.pop

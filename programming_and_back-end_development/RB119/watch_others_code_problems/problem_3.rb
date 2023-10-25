@@ -54,7 +54,7 @@ def next_bigger_num(num)
   loop do
     break if index + 1 > digits.size - 1
 
-    if digits[index].to_i > digits[index + 1].to_i
+    if digits[index] > digits[index + 1]
       digits[index], digits[index + 1] = digits[index + 1], digits[index]
       
       return digits.reverse.join.to_i

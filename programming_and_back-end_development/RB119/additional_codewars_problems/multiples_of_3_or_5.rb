@@ -25,23 +25,19 @@ Data Structure
   - 
 
 Algorithm:
-  - given an integer n
-  - initialise a result variable and set to an empty array
-  - Iterate from 1 up to n
-    - if the current number is a multiple of 3 OR a multiple of 5
-    - push the current number to the result array
-  - get the sum of the return array
-  - return sum
+  - given an integer
+  - return 0 if the integer is negative
+  - iterate through a range from 1 up to the integer exclusively
+    - select the current number if it is a multiple of 3 OR a multiple of 5
+  - get the sum of the array of selected numbers
 =end
 
 def solution(number)
-  sum = 0
+  return 0 if number.negative?
 
-  (1...number).each do |n|
-    sum += n if n % 3 == 0 || n % 5 == 0
-  end
-
-  sum
+  (1...number).select do |n|
+    n % 3 == 0 || n % 5 == 0
+  end.sum
 end
 
 p solution(2) == 0

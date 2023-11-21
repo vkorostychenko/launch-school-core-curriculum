@@ -16,25 +16,18 @@ Rules:
 
 Algorithm:
   - given a string
-  - initialize the local variable result to an empty array
-  - iterate from 0 up to the length of the input string -1 with the step = 2
-    - take two elements starting from the current index from the input string
-    - if their length is NOT equal to 2
-      - append '_'
-    - append the substring into the result array
-  - return result array
+  - append '_' to the input string if its length is odd
+  - initialize the result array
+  - iterate over the string
+    - slice the string into the substrings of the length of 2
+    - append substrings into the result array
+  - return the result array
 =end
 
 def solution(str)
-  result = []
+  str = str + '_' if str.size.odd?
 
-  (0...str.size).step(2) do |start_idx|
-    substr = str[start_idx, 2]
-
-    substr.size == 2 ? result << substr : result << substr + '_'
-  end
-
-  result
+  str.scan(/\w{2}/)
 end
 
 p solution('abc') == ['ab', 'c_']

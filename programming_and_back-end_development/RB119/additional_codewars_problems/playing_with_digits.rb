@@ -47,11 +47,9 @@ Rules:
 Algorithm:
   - given a number and a positive integer
   - get an array of digits of the given number
-  - initialize the local variable power to the input integer - 1
   - initialize the local variable sum to the return value
-    - iterate over the array of digits for transformation
-      - power += 1
-      - current digit ** power
+    - iterate over the array of digits for transformation with index
+      - current digit ** (power + current index)
     - get sum
   - if modulo division of sum by the input number is equal to 0
     - return the result of the division sum by the input number
@@ -62,12 +60,10 @@ Algorithm:
 
 def dig_pow(number, power)
   digits = number.digits.reverse
-  power -= 1
 
-  sum = digits.sum do |digit|
-    power += 1
-    digit ** power
-  end
+  sum = digits.map.with_index do |digit, index|
+    digit ** (power + index)
+  end.sum
 
   sum % number == 0 ? sum / number : -1
 end

@@ -43,18 +43,7 @@ Algorithm:
 def solve(n, k)
   digits = n.digits.reverse
 
-  until k == 0
-    lowest_number = (0...digits.size).map do |skip_idx|
-                      digits.reject.with_index do |digit, idx|
-                        skip_idx == idx
-                      end.join
-                    end.min_by(&:to_i)
-    
-    digits = lowest_number.chars.map(&:to_i)
-    k -= 1
-  end
-
-  lowest_number
+  digits.combination(digits.size - k).map(&:join).min_by(&:to_i)
 end
 
 p solve(123056,1) =='12056'

@@ -53,23 +53,19 @@ Rules:
 Algorithm:
   - given a string
   - create a downcased copy of a string
-  - delete everything that is NOT a space, a-z and a (')
-  - split the string into an array of words with spaces
-  - create a hash containing each element as a value and its count as a key from
-    the split array
-  - sort the hash in descending order by value
-  - get keys array from the hash
-  - return an array containing the first 3 elements from the array of keys
+  - create an array of words from the downcase copy of a string
+  - iterate over a unique copy of the array of words
+    - select 3 elements by their count in the array of words
+  - return the array containing 3 or less words in descending order
 =end
 
 def top_3_words(str)
-  copy_str = str.downcase.delete("^a-z '")
-  words = copy_str.split.select { |word| word.match?(/[a-z]/) }
+  words = str.downcase.scan(/[a-z](?:'|[a-z])*/)
 
-  words.tally.sort_by { |key, value| -value }.to_h.keys.take(3)
+  words.uniq.max_by(3) { |word| words.count(word) }
 end
 
-p top_3_words("a a a  b  c c  d d d d  e e e e e") == ["e", "d", "a"]
+p top_3_words("a a a  b  c c  d d d d  e e e e e e") == ["e", "d", "a"]
 p top_3_words("e e e e DDD ddd DdD: ddd ddd aa aA Aa, bb cc cC e e e") == ["e", "ddd", "aa"]
 p top_3_words("  //wont won't won't ") == ["won't", "wont"]
 p top_3_words("  , e   .. ") == ["e"]

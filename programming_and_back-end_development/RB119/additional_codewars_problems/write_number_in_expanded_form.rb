@@ -33,28 +33,17 @@ Examples:
 
 Algorithm:
   - given a number
-  - create an array of digits (strings) of the given number
-  - find the size of the array of digits and assign it to a variable
+  - create an array of digits of the given number
   - iterate through the array of digits for transformation with index
-    - if the current number is > 0
-      - add the current digit (string) to the result of multiplying '0' by the
-        size of the array - current index + 0
-  - select elements that are greater than 0 (convert to an integer for comparison)
-  - join the array of selected strings with ' + ' and return a string
+    - multiply the current digit by 10 in the power of the current index
+  - select elements that are greater than 0
+  - join the array of selected numbers with ' + ' and return a string
 =end
 
-
-def expanded_form(int)
-  digits = int.to_s.chars
-  size = digits.size
-
-  digits.map!.with_index do |digit, index|
-    if digit.to_i > 0
-      digit + '0' * (size - (index + 1))
-    end
-  end
-
-  digits.select { |str_num| str_num.to_i > 0 }.join(' + ')
+def expanded_form(num)
+  num.digits.map.with_index do |digit, idx|
+    digit * (10**idx)
+  end.reject(&:zero?).reverse.join(' + ')
 end
 
 p expanded_form(12) == '10 + 2'

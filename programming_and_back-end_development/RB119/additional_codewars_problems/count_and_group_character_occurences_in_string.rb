@@ -36,12 +36,9 @@ Algorithm:
 
 def get_char_count(str)
   unique_chars = str.downcase.scan(/[a-z0-9]/i).uniq.sort
+  result = unique_chars.group_by { |char| str.downcase.count(char) }
 
-  unique_chars.each_with_object({}) do |char, result|
-    count = str.downcase.count(char)
-
-    result.key?(count) ? result[count] << char : result[count] = [char]
-  end.sort_by { |key, value| -key }.to_h
+  result.sort_by { |key, value| -key }.to_h
 end
 
 p get_char_count("Mississippi") == {4=>["i", "s"], 2=>["p"], 1=>["m"]}

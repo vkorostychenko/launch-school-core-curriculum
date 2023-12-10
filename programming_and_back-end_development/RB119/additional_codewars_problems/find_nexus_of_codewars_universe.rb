@@ -34,19 +34,14 @@ Rules:
 
 Algorithm:
   - given a hash
-  - get the min absolute difference between key and value
-  - iterate through the input hash for selection
-    - select users that have the same difference as the first user from the sorted hash
-  - get an array of ranks from the selected hash
-  - return the minimum value
+  - sort the hash
+  - get the minimum key-value pair by the absolute difference between rank and honor
+  - return the first element (rank)
 =end
 
-def nexus(users)
-  min_diff = users.min_by { |rank, honor| (rank - honor).abs }.reduce(:-).abs
-
-  users.select { |rank, honor| (rank - honor).abs == min_diff }.keys.min
+def nexus users
+  users.sort.min_by { |rank, honor| (rank - honor).abs }.first
 end
-
 
 p nexus({1 => 3, 3 => 3, 5 => 1}) == 3
 p nexus({1 => 10, 2 => 6, 3 => 4, 5 => 1}) == 3

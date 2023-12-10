@@ -46,21 +46,11 @@ Algorithm:
 =end
 
 def cakes(recipe, ingredients)
-  meals = nil
-
-  recipe.each do |ingredient, amount|
-    availible_amount = ingredients[ingredient]
-
-    return 0 if availible_amount.nil?
-     
-    current_ingredient_times = availible_amount / amount
+  recipe.map do |ingredient, amount|
+    available_amount = ingredients[ingredient]
     
-    if meals.nil? || current_ingredient_times < meals
-      meals = current_ingredient_times
-    end
-  end
-
-  meals
+    available_amount ? available_amount / amount : 0
+  end.min
 end
 
   p cakes({"flour"=>500, "sugar"=>200, "eggs"=>1},{"flour"=>1200, "sugar"=>1200, "eggs"=>5, "milk"=>200}) == 2

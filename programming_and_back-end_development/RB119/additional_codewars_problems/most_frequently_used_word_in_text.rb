@@ -60,7 +60,7 @@ Algorithm:
 =end
 
 def top_3_words(str)
-  words = str.downcase.scan(/[a-z](?:'|[a-z])*/)
+  words = str.downcase.scan(/\b[a-z'-]+/)
 
   words.uniq.max_by(3) { |word| words.count(word) }
 end

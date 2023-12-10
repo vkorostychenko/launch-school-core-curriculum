@@ -42,13 +42,9 @@ Algorithm:
   - otherwise, return an array of keys from the hash of selected suspects
 =end
 
-def find_suspects(pockets, items)
+def find_suspects(pockets, allowed_items)
   suspects = pockets.reject do |person, pocket|
-    if !pocket || pocket.empty?
-      true
-    else
-      pocket.all? { |item| items.include?(item) }
-    end
+    !pocket || pocket.empty? || (pocket - allowed_items).empty?
   end
 
   suspects.empty? ? nil : suspects.keys

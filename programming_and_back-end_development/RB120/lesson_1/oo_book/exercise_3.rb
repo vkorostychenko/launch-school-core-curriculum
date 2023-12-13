@@ -37,7 +37,7 @@ class MyCar
   end
 end
 
-volkswagen = MyCar.new(2018, 'Grey', 'Multivan')
+volkswagen = MyCar.new(2018, 'Multivan', 'Grey')
 
 volkswagen.speed_up(20)
 volkswagen.current_speed

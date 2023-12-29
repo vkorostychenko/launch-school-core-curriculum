@@ -47,9 +47,19 @@ puts banner
 +--+
 =end
 
+=begin
+Further Exploration
+
+Modify this class so 'new' will optionally let you specify a fixed banner width
+at the time the Banner object is created. The message in the banner should be
+centered within the banner of that width. Decide for yourself how you want
+to handle widths that are either too narrow or too wide.
+=end
+
 class Banner
-  def initialize(message)
+  def initialize(message, width=false)
     @message = message
+    width ? @width = width : @width = @message.size
   end
 
   def to_s
@@ -59,15 +69,21 @@ class Banner
   private
 
   def horizontal_rule
-    "+-#{'-' * @message.size}-+"
+    "+-#{'-' * @width}-+"
   end
   
   def empty_line
-    "| #{' ' * @message.size} |"
+    "| #{' ' * @width} |"
   end
   
   def message_line
-    "| #{@message} |"
+    "| #{' ' * align}#{@message}#{' ' * align} |"
+  end
+
+  def align
+    gap = @width - @message.size
+
+    gap > 0 ? gap / 2 : gap
   end
 end
 
@@ -86,3 +102,11 @@ puts banner
 # |  |
 # |  |
 # +--+
+
+banner = Banner.new('To boldly go where no one has gone before.', 100)
+puts banner
+# +------------------------------------------------------------------------------------------------------+
+# |                                                                                                      |
+# |                              To boldly go where no one has gone before.                              |
+# |                                                                                                      |
+# +------------------------------------------------------------------------------------------------------+

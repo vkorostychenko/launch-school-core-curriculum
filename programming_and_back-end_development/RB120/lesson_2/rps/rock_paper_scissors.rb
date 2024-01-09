@@ -18,29 +18,15 @@ class Move
   end
 
   def >(other_move)
-    if rock?
-      return true if other_move.scissors?
-      return false
-    elsif paper?
-      return true if other_move.rock?
-      return false
-    elsif scissors?
-      return true if other_move.paper?
-      return false
-    end
+    (rock? && other_move.scissors?) ||
+      (paper? && other_move.rock?) ||
+      (scissors? && other_move.paper?)
   end
 
   def <(other_move)
-    if rock?
-      return true if other_move.paper?
-      return false
-    elsif paper?
-      return true if other_move.scissors?
-      return false
-    elsif scissors?
-      return true if other_move.rock?
-      return false
-    end
+    (rock? && other_move.paper?) ||
+      (paper? && other_move.scissors?) ||
+      (scissors? && other_move.rock?)
   end
 
   def to_s
@@ -70,13 +56,13 @@ class Human < Player
 
   def choose
     choice = nil
-      loop do
-        puts "Please choose rock, paper or scissors:"
-        choice = gets.chomp
-        break if Move::VALUES.include? choice
-        puts "Sorry, invalid choice."
-      end
-      self.move = Move.new(choice)
+    loop do
+      puts "Please choose rock, paper or scissors:"
+      choice = gets.chomp
+      break if Move::VALUES.include? choice
+      puts "Sorry, invalid choice."
+    end
+    self.move = Move.new(choice)
   end
 end
 
@@ -90,7 +76,7 @@ class Computer < Player
   end
 end
 
-#Game Orcherstration Engine
+# Game Orcherstration Engine
 
 class RPSGame
   attr_accessor :human, :computer
@@ -103,15 +89,17 @@ class RPSGame
   def display_welcome_message
     puts "Welcome to Rock, Paper, Scissors!"
   end
-  
+
   def display_goodbye_message
     puts "Thank you for playing Rock, Paper, Scissors. Good bye!"
   end
 
-  def display_winner
+  def display_moves
     puts "#{human.name} choose #{human.move}."
     puts "#{computer.name} chose #{computer.move}."
+  end
 
+  def display_winner
     if human.move > computer.move
       puts "#{human.name} won!"
     elsif human.move < computer.move
@@ -130,7 +118,7 @@ class RPSGame
       puts "Sorry, must be y or n."
     end
 
-    answer == 'y'
+    answer.downcase == 'y'
   end
 
   def play
@@ -138,6 +126,7 @@ class RPSGame
     loop do
       human.choose
       computer.choose
+      display_moves
       display_winner
       break unless play_again?
     end

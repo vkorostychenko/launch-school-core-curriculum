@@ -19,14 +19,14 @@ class Move
 
   def >(other_move)
     (rock? && other_move.scissors?) ||
-      (paper? && other_move.rock?) ||
-      (scissors? && other_move.paper?)
+    (paper? && other_move.rock?) ||
+    (scissors? && other_move.paper?)
   end
 
   def <(other_move)
     (rock? && other_move.paper?) ||
-      (paper? && other_move.scissors?) ||
-      (scissors? && other_move.rock?)
+    (paper? && other_move.scissors?) ||
+    (scissors? && other_move.rock?)
   end
 
   def to_s
@@ -35,10 +35,11 @@ class Move
 end
 
 class Player
-  attr_accessor :move, :name
+  attr_accessor :move, :name, :score
 
   def initialize
     set_name
+    @score = 0
   end
 end
 
@@ -47,7 +48,7 @@ class Human < Player
     n = ""
     loop do
       puts "What's your name?"
-      n = gets.chomp
+      n = gets.chomp.strip.capitalize
       break unless n.empty?
       puts "Sorry, must enter a value."
     end
@@ -76,22 +77,18 @@ class Computer < Player
   end
 end
 
-# Game Orcherstration Engine
-
-class RPSGame
-  attr_accessor :human, :computer
-
-  def initialize
-    @human = Human.new
-    @computer = Computer.new
-  end
-
+module Displayable
   def display_welcome_message
+    puts "Hey #{human.name},"
     puts "Welcome to Rock, Paper, Scissors!"
   end
 
+  def display_rules
+    puts "Whoever reaches #{RPSGame::WIN_SCORE} points first wins."
+  end
+
   def display_goodbye_message
-    puts "Thank you for playing Rock, Paper, Scissors. Good bye!"
+    puts "Thank you for playing Rock, Paper, Scissors. Goodbye!"
   end
 
   def display_moves
@@ -99,15 +96,69 @@ class RPSGame
     puts "#{computer.name} chose #{computer.move}."
   end
 
+  def display_score
+    puts "\n#{human.name}: #{human.score}"
+    puts "#{computer.name}: #{computer.score}"
+    puts ""
+  end
+
   def display_winner
     if human.move > computer.move
-      puts "#{human.name} won!"
+      puts "\n#{human.name} won this round!"
     elsif human.move < computer.move
-      puts "#{computer.name} won!"
+      puts "\n#{computer.name} won this round!"
     else
-      puts "It's a tie!"
+      puts "\nIt's a tie!"
     end
   end
+
+  def display_grand_winner
+    winner = human.score > computer.score ? human.name : computer.name
+
+    puts "#{winner} is the Grand Winner!"
+  end
+end
+
+# Game Orcherstration Engine
+
+class RPSGame
+  include Displayable
+
+  WIN_SCORE = 3
+
+  attr_accessor :human, :computer
+
+  def initialize
+    @human = Human.new
+    @computer = Computer.new
+  end
+
+  def play
+    clear
+    display_welcome_message
+    pause
+    loop do
+      loop do
+        clear
+        display_rules
+        display_score
+        human.choose
+        computer.choose
+        display_moves
+        display_winner
+        update_score
+        pause
+        break if grand_winner?
+      end
+      clear
+      display_grand_winner
+      clear_score
+      break unless play_again?
+    end
+    display_goodbye_message
+  end
+
+  private
 
   def play_again?
     answer = nil
@@ -121,16 +172,29 @@ class RPSGame
     answer.downcase == 'y'
   end
 
-  def play
-    display_welcome_message
-    loop do
-      human.choose
-      computer.choose
-      display_moves
-      display_winner
-      break unless play_again?
+  def update_score
+    if human.move > computer.move
+      human.score += 1
+    elsif human.move < computer.move
+      computer.score += 1
     end
-    display_goodbye_message
+  end
+
+  def grand_winner?
+    human.score == WIN_SCORE || computer.score == WIN_SCORE
+  end
+
+  def clear_score
+    human.score = 0
+    computer.score = 0
+  end
+
+  def clear
+    system 'clear'
+  end
+
+  def pause
+    sleep(3)
   end
 end
 

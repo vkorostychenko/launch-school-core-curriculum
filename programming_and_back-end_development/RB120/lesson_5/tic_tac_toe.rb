@@ -38,12 +38,15 @@ class Player
 end
 
 class TTTGame
+  HUMAN_MARKER = "X"
+  COMPUTER_MARKER = "O"
+
   attr_reader :board, :human, :computer
 
   def initialize
     @board = Board.new
-    @human = Player.new('X')
-    @computer = Player.new('O')
+    @human = Player.new(HUMAN_MARKER)
+    @computer = Player.new(COMPUTER_MARKER)
   end
 
   def display_welcome_message
@@ -86,6 +89,10 @@ class TTTGame
     binding.pry
     board.set_square_at(square, human.marker)
   end
+  
+  def computer_moves
+    board.set_square_at((1..9).to_a.sample, computer.marker)
+  end
 
   def play
     display_welcome_message
@@ -93,11 +100,12 @@ class TTTGame
       display_board
       human_moves
       display_board
-      break
-      break if someone_won? || board_full?
+      # break if someone_won? || board_full?
       
       computer_moves
-      break if someone_won? || board_full?
+      # break if someone_won? || board_full?
+      display_board
+      break
     end
     # display_result
     display_goodbye_message

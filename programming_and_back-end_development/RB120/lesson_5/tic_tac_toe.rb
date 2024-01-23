@@ -172,13 +172,25 @@ class TTTGame
     puts ""
   end
 
+  def display_choose_a_square_message
+    free_squares = board.unmarked_keys
+
+    list = if free_squares.size > 1
+                free_squares[0...-1].join(', ') + " or #{free_squares.last}"
+              else
+                free_squares.join
+              end
+
+    puts "Choose a square (#{list}): "
+  end
+
   def clear_screen_and_display_board
     clear
     display_board
   end
 
   def human_moves
-    puts "Choose a square (#{board.unmarked_keys.join(', ')}): "
+    display_choose_a_square_message
     square = nil
     loop do
       square = gets.chomp.to_i

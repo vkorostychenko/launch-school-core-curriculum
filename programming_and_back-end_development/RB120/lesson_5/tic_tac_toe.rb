@@ -1,19 +1,73 @@
 module Promptable
+  def prompt(message)
+    puts "=> #{message}"
+  end
+
+  def enter_username
+    name = ""
+    loop do
+      prompt "What is your name?"
+      name = gets.chomp.strip.capitalize
+      break unless name.empty?
+
+      prompt "Sorry, must enter a value."
+    end
+
+    name
+  end
+
+  def choose_marker
+    choice = ""
+    loop do
+      prompt "Start the game as 'X' or choose 'O' so the opponent goes first."
+      choice = gets.chomp.upcase
+      break if %w(X O).include? choice
+
+      prompt "Sorry, must be 'X' or 'O'."
+    end
+
+    choice
+  end
+
+  def choose_square(list)
+    choice = nil
+    loop do
+      prompt "Choose a square (#{joinor(list)}): "
+      choice = gets.chomp.to_i
+      break if list.include? choice
+
+      prompt "Sorry, must be a value from the list."
+    end
+
+    choice
+  end
+
   def continue
-    puts "Press any key to continue..."
+    prompt "Press any key to continue..."
     gets
   end
 
   def play_again?
     answer = nil
     loop do
-      puts "Would you like to play again? (y/n)"
+      prompt "Would you like to play again? (y/n)"
       answer = gets.chomp.downcase
-      break if %(y n).include?(answer)
-      puts "Sorry, must be y or n"
+      break if %w(y n).include? answer
+
+      prompt "Sorry, must be y or n."
     end
 
     answer == 'y'
+  end
+
+  private
+
+  def joinor(arr)
+    if arr.size > 1
+      arr[0...-1].join(', ') + " or #{arr.last}"
+    else
+      arr.join
+    end
   end
 end
 
@@ -21,66 +75,45 @@ module Displayable
   include Promptable
 
   def display_welcome_message
-    puts "Welcome to Tic Tac Toe!"
-    puts "First to #{TTTGame::WIN_SCORE} wins the game. Good luck!"
-    puts ""
+    prompt "Welcome to Tic Tac Toe!"
+    prompt "First to #{self.class::WIN_SCORE} is the Grand Winner. Good luck!"
   end
 
   def display_goodbye_message
-    puts "Thanks for playing Tic Tac Toe! Goodbye!"
+    prompt "Thanks for playing Tic Tac Toe! Goodbye!"
   end
 
   def display_board
-    puts "You're #{human.marker}. Computer is a #{computer.marker}."
-    puts ""
     display_score
-    puts ""
     board.draw
-    puts ""
+    prompt "You're '#{human.marker}'. #{computer.name} is '#{computer.marker}'"
   end
 
   def display_score
-    puts "Score #{human.score} | #{computer.score}"
+    h = "#{human.name}: #{human.score}"
+    c = "#{computer.name}: #{computer.score}"
+
+    prompt "#{h} | #{c}"
   end
 
-  def display_winner
-    clear_screen_and_display_board
-
-    case board.winning_marker
-    when human.marker
-      puts "You won this round!"
-    when computer.marker
-      puts "Computer won this round!"
+  def display_result
+    clear_screen_and_display_board # captures the final move
+    if winning_player
+      prompt "#{winning_player} wins!"
+      winning_player.increment_score
     else
-      puts "It's a tie!"
+      prompt "It's a tie!"
     end
-    puts ""
-  end
-
-  def display_choose_a_square_message
-    free_squares = board.unmarked_keys
-
-    list = if free_squares.size > 1
-             free_squares[0...-1].join(', ') + " or #{free_squares.last}"
-           else
-             free_squares.join
-           end
-
-    puts "Choose a square (#{list}): "
   end
 
   def display_grand_winner
-    if human.score == TTTGame::WIN_SCORE
-      puts "You are the grand winner!"
-    else
-      puts "Computer is the grand winner!"
-    end
-    puts ""
+    clear
+    display_score
+    prompt "#{grand_winner} is the Grand Winner!"
   end
 
   def display_play_again_message
-    puts "Let's play again!"
-    puts ""
+    prompt "Let's play again!"
   end
 
   def clear
@@ -93,6 +126,8 @@ class Board
                   [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                   [[1, 5, 9], [3, 5, 7]]              # diagonals
 
+  MIDDLE_SQUARE = 5
+
   def initialize
     @squares = {}
     reset
@@ -102,12 +137,32 @@ class Board
     @squares[key].marker = marker
   end
 
-  def unmarked_keys
+  def middle_square_unmarked?
+    @squares[MIDDLE_SQUARE].unmarked?
+  end
+
+  def unmarked_squares
     @squares.keys.select { |key| @squares[key].unmarked? }
   end
 
+  def square_at_risk(marker)
+    WINNING_LINES.each do |line|
+      squares = @squares.values_at(*line).collect(&:marker)
+      if squares.count(marker) == 2 &&
+         squares.count(Square::INITIAL_MARKER) == 1
+        return line[squares.index(Square::INITIAL_MARKER)]
+      end
+    end
+
+    nil
+  end
+
+  def random_square
+    unmarked_squares.sample
+  end
+
   def full?
-    unmarked_keys.empty?
+    unmarked_squares.empty?
   end
 
   def someone_won?
@@ -122,23 +177,26 @@ class Board
         return squares.first.marker
       end
     end
+
     nil
   end
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   def draw
+    puts ""
     puts "     |     |"
     puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]}"
     puts "     |     |"
     puts "-----+-----+-----"
     puts "     |     |"
     puts "  #{@squares[4]}  |  #{@squares[5]}  |  #{@squares[6]}"
-    puts "     |     |"
-    puts "-----+-----+-----"
-    puts "     |     |"
-    puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]}"
-    puts "     |     |"
+    puts "     |     |       1 | 2 | 3 "
+    puts "-----+-----+----- ---+---+---"
+    puts "     |     |       4 | 5 | 6 "
+    puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]}   ---+---+---"
+    puts "     |     |       7 | 8 | 9 "
+    puts ""
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
@@ -179,128 +237,157 @@ class Square
 end
 
 class Player
-  attr_accessor :score
-  attr_reader :marker
+  attr_accessor :name, :marker
+  attr_reader :score
 
-  def initialize(marker)
-    @marker = marker
+  def initialize
     @score = 0
   end
 
+  def increment_score
+    @score += 1
+  end
+
   def reset_score
-    self.score = 0
+    @score = 0
+  end
+
+  def to_s
+    name
+  end
+end
+
+class Human < Player
+  include Promptable
+
+  def move(board)
+    board[choose_square(board.unmarked_squares)] = marker
+  end
+end
+
+class Computer < Player
+  def move(board)
+    square =
+      board.square_at_risk(TTTGame.computer_marker) || # winnning move
+      board.square_at_risk(TTTGame.human_marker) || # defence
+      (Board::MIDDLE_SQUARE if board.middle_square_unmarked?) ||
+      board.random_square
+
+    board[square] = marker
   end
 end
 
 class TTTGame
   include Displayable
 
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
-  WIN_SCORE = 2
+  WIN_SCORE = 5
+  COMPUTER_NAMES = %w(R2D2 Hal Chappie Sonny Number5)
+
+  @@human_marker = 'X'
+  @@computer_marker = 'O'
 
   attr_reader :board, :human, :computer
 
   def initialize
     @board = Board.new
-    @human = Player.new(HUMAN_MARKER)
-    @computer = Player.new(COMPUTER_MARKER)
-    @current_marker = FIRST_TO_MOVE
+    @human = Human.new
+    @computer = Computer.new
+    @current_turn = human
+  end
+
+  def self.human_marker
+    @@human_marker
+  end
+
+  def self.computer_marker
+    @@computer_marker
   end
 
   def play
     clear
     display_welcome_message
+    setup
     main_game
     display_goodbye_message
   end
 
   private
 
-  def main_game
-    loop do
-      loop do
-        play_round
-        display_winner
-        continue
-        grand_winner? ? break : clear_screen_and_reset_round
-      end
-      clear_screen_and_display_grand_winner
-      play_again? ? clear_screen_and_reset_game : break
-    end
-  end
-
-  def play_round
-    display_board
+  def play_turns
     loop do
       current_player_moves
       break if board.someone_won? || board.full?
-      clear_screen_and_display_board if human_turn?
+      clear_screen_and_display_board
     end
-    update_score
   end
 
-  def human_moves
-    display_choose_a_square_message
-    square = nil
+  def main_game
     loop do
-      square = gets.chomp.to_i
-      break if board.unmarked_keys.include?(square)
-      puts "Sorry, that's not a valid choice."
+      display_board
+      play_turns
+      display_result_and_prompt_continue
+      if grand_winner
+        display_grand_winner
+        play_again? ? display_play_again_message_and_reset_score : break
+      end
+      reset
     end
-
-    board[square] = human.marker
   end
 
-  def computer_moves
-    board[board.unmarked_keys.sample] = computer.marker
+  def setup
+    set_markers
+    set_names
+    clear
   end
 
-  def current_player_moves
-    if human_turn?
-      human_moves
-      @current_marker = COMPUTER_MARKER
-    else
-      computer_moves
-      @current_marker = HUMAN_MARKER
+  def set_names
+    human.name = enter_username
+    computer.name = COMPUTER_NAMES.sample
+  end
+
+  def set_markers
+    if choose_marker == 'O'
+      @@human_marker = 'O'
+      @@computer_marker = 'X'
     end
+
+    human.marker = @@human_marker
+    computer.marker = @@computer_marker
+    @current_turn = who_is_x
   end
 
   def human_turn?
-    @current_marker == HUMAN_MARKER
+    @current_turn == human
   end
 
-  def update_score
+  def who_is_x
+    human.marker == 'X' ? human : computer
+  end
+
+  def alternate_turn
+    @current_turn = (human_turn? ? computer : human)
+  end
+
+  def current_player_moves
+    human_turn? ? human.move(board) : computer.move(board)
+    alternate_turn
+  end
+
+  def winning_player
     case board.winning_marker
-    when human.marker    then human.score += 1
-    when computer.marker then computer.score += 1
+    when human.marker    then human
+    when computer.marker then computer
     end
   end
 
-  def grand_winner?
-    human.score == WIN_SCORE || computer.score == WIN_SCORE
+  # returns a player object or nil
+  def grand_winner
+    [human, computer].select { |player| player.score == WIN_SCORE }.first
   end
 
-  def reset_round
-    board.reset
-    @current_marker = FIRST_TO_MOVE
-  end
-
-  def reset_game
-    reset_round
-    human.reset_score
-    computer.reset_score
-  end
-
-  def clear_screen_and_reset_round
-    clear
-    reset_round
-  end
-
-  def clear_screen_and_reset_game
-    clear
-    reset_game
+  def display_result_and_prompt_continue
+    display_result
+    continue
   end
 
   def clear_screen_and_display_board
@@ -308,9 +395,15 @@ class TTTGame
     display_board
   end
 
-  def clear_screen_and_display_grand_winner
+  def display_play_again_message_and_reset_score
+    display_play_again_message
+    [human, computer].each(&:reset_score)
+  end
+
+  def reset
+    board.reset
+    @current_turn = who_is_x
     clear
-    display_grand_winner
   end
 end
 

@@ -22,66 +22,71 @@ In all error cases, no further processing should be performed on the program.
 You should initialize the register to 0.
 =end
 
+require 'set'
+
+class MinilangError < StandardError; end
+class BadTokenError < MinilangError; end
+class EmptyStackError < MinilangError; end
+
 class Minilang
+  TOKENS = Set.new %w[PUSH ADD SUB MULT DIV MOD POP PRINT]
+
   def initialize(instructions)
     @instructions = instructions
-    @register = 0
-    @stack = []
   end
 
   def eval
-    @instructions.split.each do |value|
-      if value.to_i.to_s == value
-        @register = value.to_i
-      else
-        case value
-        when 'PUSH'          then push
-        when 'ADD'           then add
-        when 'SUB'           then sub
-        when 'MULT'          then mult
-        when 'DIV'           then div
-        when 'MOD'           then mod
-        when 'POP'           then pop
-        when 'PRINT'         then print
-        else
-          return puts "Invalid token: #{value}"
-        end
-      end
-    end
+    @register = 0
+    @stack = []
+    @instructions.split.each { |token| eval_token(token) }
+  rescue MinilangError => e
+    puts e.message
   end
 
   private
+
+  def eval_token(token)
+    if TOKENS.include?(token)
+      send(token.downcase)
+    elsif token.to_i.to_s == token # checks if a token is a number
+      @register = token.to_i
+    else
+      raise BadTokenError, "Invalid token: #{token}"
+    end
+  end
 
   def push
     @stack << @register
   end
 
   def add
-    @register += @stack.pop
+    @register += pop
   end
 
   def sub
-    @register -= @stack.pop
+    @register -= pop
   end
 
   def mult
-    @register *= @stack.pop
+    @register *= pop
   end
 
   def div
-    @register /= @stack.pop
+    @register /= pop
   end
 
   def mod
-    @register %= @stack.pop
+    @register %= pop
   end
 
   def pop
+    raise EmptyStackError, 'Empty stack!' if @stack.empty?
+
     @register = @stack.pop
   end
 
   def print
-    @register.nil? ? puts('Empty stack!') : puts(@register)
+    puts @register
   end
 end
 

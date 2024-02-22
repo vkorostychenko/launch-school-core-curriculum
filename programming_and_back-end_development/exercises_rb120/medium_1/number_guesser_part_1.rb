@@ -63,63 +63,50 @@ Note that a game object should start a new game with a new number to guess with 
 =end
 
 class GuessingGame
+  GUESSES = 7
+  RANGE = 1..100
+
+  def initialize
+    @secret_number = nil
+  end
+
   def play
     reset
-    loop do
-      puts "You have #{@guesses} guesses remaining."
+    GUESSES.downto(1) do |remaining_guesses|
+      puts "You have #{remaining_guesses} guesses remaining."
       guess = prompt_number
 
-      if guess < @number
+      if guess < @secret_number
         puts 'Your guess is too low.'
         puts ''
-        decrement_guesses
-      elsif guess > @number
+      elsif guess > @secret_number
         puts 'Your guess is too high.'
         puts ''
-        decrement_guesses
       else
         puts "That's the number!"
         puts ''
-        puts 'You won!'
-        break
-      end
-
-      if @guesses <= 1
-        puts 'You have no more guesses. You lost!'
-        break
+        return puts 'You won!'
       end
     end
+    puts 'You have no more guesses. You lost!'
   end
 
   private
 
   def prompt_number
-    print 'Enter a number between 1 and 100: '
-    number = nil
+    print "Enter a number between #{RANGE.first} and #{RANGE.last}: "
     loop do
       number = gets.chomp.to_i
-      break if number.between?(1, 100)
+      return number if RANGE.cover?(number)
 
-      puts 'Invalid guess. Enter a number between 1 and 100: '
+      puts 'Invalid guess.'
     end
-    number
-  end
-
-  def random_number
-    rand(1..100)
-  end
-
-  def decrement_guesses
-    @guesses -= 1
   end
 
   def reset
-    @number = random_number
-    @guesses = 7
+    @secret_number = rand(RANGE)
   end
 end
 
 game = GuessingGame.new
-game.play
-
 game.play

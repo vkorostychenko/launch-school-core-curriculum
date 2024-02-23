@@ -1,10 +1,3 @@
-=begin
-On line 42 of our code, we intend to display information regarding the books
-currently checked in to our community library. Instead, an exception is raised.
-Determine what caused this error and fix the code so that the data is displayed
-as expected.
-=end
-
 class Library
   attr_accessor :address, :phone, :books
 
@@ -46,4 +39,11 @@ community_library.check_in(learn_to_program)
 community_library.check_in(little_women)
 community_library.check_in(wrinkle_in_time)
 
-community_library.books.display_data
+community_library.books.each(&:display_data)
+
+=begin
+On line 42 of our code, we intend to display information regarding the books
+currently checked into our community library. Instead, an exception is raised.
+Determine what caused this error and fix the code so that the data is displayed
+as expected.
+=end

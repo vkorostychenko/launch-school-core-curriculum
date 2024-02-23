@@ -20,8 +20,7 @@ class GeoLocation
   end
 
   def ==(other)
-    latitude == other.latitude &&
-    longitude == other.longitude
+    latitude == other.latitude && longitude == other.longitude
   end
 
   def to_s

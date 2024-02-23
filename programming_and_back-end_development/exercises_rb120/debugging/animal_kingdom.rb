@@ -37,7 +37,7 @@ end
 
 class SongBird < Bird
   def initialize(diet, superpower, song)
-    super
+    super(diet, superpower)
     @song = song
   end
 
@@ -48,6 +48,6 @@ end
 
 # Examples
 
-unicornfish = Fish.new(:herbivore, 'breathe underwater')
-penguin = FlightlessBird.new(:carnivore, 'drink sea water')
-robin = SongBird.new(:omnivore, 'sing', 'chirp chirrr chirp chirp chirrrr')
+p unicornfish = Fish.new(:herbivore, 'breathe underwater')
+p penguin = FlightlessBird.new(:carnivore, 'drink sea water')
+p robin = SongBird.new(:omnivore, 'sing', 'chirp chirrr chirp chirp chirrrr')

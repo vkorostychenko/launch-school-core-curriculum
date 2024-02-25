@@ -22,7 +22,7 @@ class File
   end
 
   def to_s
-    "#{name}.#{FORMAT}"
+    "#{name}.#{self.class::FORMAT}"
   end
 end
 

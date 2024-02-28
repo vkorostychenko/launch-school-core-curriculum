@@ -1,5 +1,5 @@
 class BankAccount
-  attr_reader :balance
+  attr_accessor :balance
 
   def initialize(account_number, client)
     @account_number = account_number
@@ -8,7 +8,7 @@ class BankAccount
   end
 
   def deposit(amount)
-    if amount > 0
+    if amount.positive?
       self.balance += amount
       "$#{amount} deposited. Total balance is $#{balance}."
     else
@@ -17,25 +17,11 @@ class BankAccount
   end
 
   def withdraw(amount)
-    if amount > 0
-      success = (self.balance -= amount)
-    else
-      success = false
-    end
-
-    if success
+    if amount.positive? && valid_transaction?(balance - amount)
+      self.balance -= amount
       "$#{amount} withdrawn. Total balance is $#{balance}."
     else
       "Invalid. Enter positive amount less than or equal to current balance ($#{balance})."
-    end
-  end
-
-  def balance=(new_balance)
-    if valid_transaction?(new_balance)
-      @balance = new_balance
-      true
-    else
-      false
     end
   end
 

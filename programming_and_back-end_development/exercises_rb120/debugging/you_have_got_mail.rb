@@ -1,5 +1,3 @@
-require 'pry'
-
 class Mail
   def to_s
     "#{self.class}"

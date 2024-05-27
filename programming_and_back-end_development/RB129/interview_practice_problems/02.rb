@@ -5,6 +5,16 @@ class Human
   def initialize(name="Dylan")
     @name = name
   end
+
+  def self.hair_colour(value)
+    Human.new.hair_colour(value)
+  end
+
+  def hair_colour(value)
+    value = 'blonde' if value.empty?
+
+    "Hi, my name is #{name} and I have #{value} hair."
+  end
 end
 
 puts Human.new("Jo").hair_colour("blonde")

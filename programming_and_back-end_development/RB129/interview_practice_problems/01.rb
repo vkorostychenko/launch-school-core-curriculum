@@ -2,7 +2,12 @@
 class Person
   def initialize(name, job)
       @name = name
-  end 
+      @job = job
+  end
+
+  def to_s
+    "My name is #{@name} and I am #{@job}"
+  end
 end
 
 roger = Person.new("Roger", "Carpenter")

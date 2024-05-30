@@ -2,13 +2,18 @@
 
 module Flightable
   def fly
+    "I am #{@name}, I am a #{self.class.to_s.downcase}, and I can fly!"
   end
 end
 
 class Superhero
+  include Flightable
+
   attr_accessor :ability
 
   def self.fight_crime
+    puts "I am #{self}!"
+    self.new('Temp').announce_ability
   end
 
   def initialize(name)
@@ -16,11 +21,16 @@ class Superhero
   end
 
   def announce_ability
-    puts "I fight crime with my #{ability} ability!"
+    puts "I fight crime with my #{ability.description} ability!"
   end
 end
 
-class LSMan < Superhero; end
+class LSMan < Superhero
+  def initialize(name)
+    super
+    @ability = Ability.new('coding skills')
+  end
+end
 
 class Ability
   attr_reader :description
@@ -34,6 +44,6 @@ superman = Superhero.new('Superman')
 
 p superman.fly # => I am Superman, I am a superhero, and I can fly!
 
-LSMan.fight_crime 
+LSMan.fight_crime
 # => I am LSMan!
 # => I fight crime with my coding skills ability!

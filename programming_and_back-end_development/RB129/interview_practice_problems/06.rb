@@ -21,5 +21,5 @@ obj1 = ClassA.new(50)
 obj2 = ClassA.new(25)
 obj3 = ClassB.new
 
-p obj1 > obj2
-p obj2 > obj3
+p obj1.field2 > obj2.field2
+p obj2.field1 > obj3.field1

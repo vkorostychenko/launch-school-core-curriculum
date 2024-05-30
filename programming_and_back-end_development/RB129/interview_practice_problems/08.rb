@@ -18,7 +18,7 @@ class Summoner < Wizard
   attr_reader :souls
 
   def initialize(name, hitpoints)
-    # only add one line here
+    super
     @souls = []
   end
 

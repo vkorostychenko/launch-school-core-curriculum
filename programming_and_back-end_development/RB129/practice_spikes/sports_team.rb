@@ -1,3 +1,71 @@
+module Runable
+  def run
+    puts "#{self.class} is running..."
+  end
+end
+
+class Player
+  include Runable
+
+  def initialize
+    @jersey = 'blue'
+  end
+
+  def shoot
+    "Shooting..."
+  end
+end
+
+class Attacker < Player
+  def lob
+    puts 'Lobbing...'
+  end
+end
+
+class Midfielder < Player
+  def pass
+    puts 'Passing...'
+  end
+end
+
+class Defender < Player
+  def block
+    puts 'Blocking...'
+  end
+end
+
+class Goalkeeper < Player
+  def initialize
+    @jersey = 'white with blue stripes'
+  end
+end
+
+class Referee
+  include Runable
+
+  def initialize
+    @jersey = 'black'
+  end
+
+  def whistle
+    puts 'Whistling...'
+  end
+end
+
+attacker = Attacker.new
+midfielder = Midfielder.new
+defender = Defender.new
+goalkeeper = Goalkeeper.new
+referee = Referee.new
+
+[attacker, midfielder, defender, goalkeeper, referee].each(&:run)
+p attacker, midfielder, defender, goalkeeper, referee
+
+attacker.lob
+midfielder.pass
+defender.block
+referee.whistle
+
 =begin
 SPORTS TEAM
 

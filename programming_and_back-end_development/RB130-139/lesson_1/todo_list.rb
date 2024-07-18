@@ -127,6 +127,31 @@ class TodoList
     each { |todo| list << todo if yield(todo) }
     list
   end
+
+  def find_by_title(title)
+    each { |todo| return todo if todo.title == title }
+    nil
+  end
+
+  def all_done
+    select(&:done?)
+  end
+
+  def all_not_done
+    select { |todo| !todo.done? }
+  end
+
+  def mark_done(title)
+    find_by_title(title) && find_by_title(title).done!
+  end
+
+  def mark_all_done
+    each(&:done!)
+  end
+
+  def mark_all_undone
+    each(&:undone!)
+  end
 end
 
 todo1 = Todo.new("Buy milk")
@@ -138,8 +163,9 @@ list.add(todo1)
 list.add(todo2)
 list.add(todo3)
 
-todo1.done!
-
-results = list.select { |todo| todo.done? }    # you need to implement this method
-
-puts results.inspect
+p list.find_by_title("Clean room")
+list.mark_done("Clean room")
+p list.all_done
+p list.all_not_done
+p list.mark_all_done
+p list.mark_all_undone

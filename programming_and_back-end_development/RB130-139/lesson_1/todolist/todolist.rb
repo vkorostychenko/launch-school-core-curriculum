@@ -153,19 +153,3 @@ class TodoList
     each(&:undone!)
   end
 end
-
-todo1 = Todo.new("Buy milk")
-todo2 = Todo.new("Clean room")
-todo3 = Todo.new("Go to gym")
-
-list = TodoList.new("Today's Todos")
-list.add(todo1)
-list.add(todo2)
-list.add(todo3)
-
-p list.find_by_title("Clean room")
-list.mark_done("Clean room")
-p list.all_done
-p list.all_not_done
-p list.mark_all_done
-p list.mark_all_undone

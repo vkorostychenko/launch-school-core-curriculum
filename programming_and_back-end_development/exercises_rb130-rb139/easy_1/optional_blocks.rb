@@ -4,10 +4,16 @@
 
 # Examples:
 
-def compute
-  block_given? ? yield : 'Does not compute.'
+def compute(value)
+  block_given? ? yield(value) : 'Does not compute.'
 end
 
-p compute { 5 + 3 } == 8
-p compute { 'a' + 'b' } == 'ab'
-p compute == 'Does not compute.'
+p compute(5) { |n| n + 3 } == 8
+p compute('a') { |s| s + 'b' } == 'ab'
+p compute(1) == 'Does not compute.'
+
+# Further Exploration
+
+# Modify the compute method so it takes a single argument and yields that argument
+# to the block. Provide at least 3 examples of calling this new version of compute,
+# including a no-block call.

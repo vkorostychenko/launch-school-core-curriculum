@@ -6,6 +6,12 @@
 
 # Examples:
 
+def count(collection)
+  total = 0
+  collection.each { |element| total += 1 if yield(element) }
+  total
+end
+
 p count([1,2,3,4,5]) { |value| value.odd? } == 3
 p count([1,2,3,4,5]) { |value| value % 3 == 1 } == 2
 p count([1,2,3,4,5]) { |value| true } == 5

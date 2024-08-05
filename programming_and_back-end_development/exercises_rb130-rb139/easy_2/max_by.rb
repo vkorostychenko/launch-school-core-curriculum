@@ -14,9 +14,42 @@
 
 # Examples:
 
-max_by([1, 5, 3]) { |value| value + 2 } == 5
-max_by([1, 5, 3]) { |value| 9 - value } == 1
-max_by([1, 5, 3]) { |value| (96 - value).chr } == 1
-max_by([[1, 2], [3, 4, 5], [6]]) { |value| value.size } == [3, 4, 5]
-max_by([-7]) { |value| value * 3 } == -7
-max_by([]) { |value| value + 5 } == nil
+=begin
+Algorithm:
+
+Given an array and a block.
+Do not mutate the given array.
+Initialize a local variable result to nil.
+Iterate over the array with an index.
+On each iteration yield the current element to the block.
+Assign the return value of the previous step to the local variable.
+
+
+
+
+Example:
+
+[1, 5, 3] - input
+ 3, 7, 5  - return value from the block on each iteration
+
+ Should return the element at index 1, which is 5.
+=end
+
+def max_by(array)
+  max_element = nil
+  array.each do |element|
+    if max_element.nil?
+      max_element = element
+    else
+      max_element = element if yield(element) > yield(max_element)
+    end
+  end
+  max_element
+end
+
+p max_by([1, 5, 3]) { |value| value + 2 } == 5
+p max_by([1, 5, 3]) { |value| 9 - value } == 1
+p max_by([1, 5, 3]) { |value| (96 - value).chr } == 1
+p max_by([[1, 2], [3, 4, 5], [6]]) { |value| value.size } == [3, 4, 5]
+p max_by([-7]) { |value| value * 3 } == -7
+p max_by([]) { |value| value + 5 } == nil

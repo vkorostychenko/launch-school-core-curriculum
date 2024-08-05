@@ -12,6 +12,15 @@ class Device
   def record(recording)
     @recordings << recording
   end
+
+  def listen
+    record(yield) if block_given?
+    nil
+  end
+
+  def play
+    puts @recordings.last
+  end
 end
 
 # Anything that is said is retrieved by this listening device via a block.

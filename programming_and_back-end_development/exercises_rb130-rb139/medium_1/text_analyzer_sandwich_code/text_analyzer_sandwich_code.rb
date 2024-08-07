@@ -18,14 +18,14 @@
 
 class TextAnalyzer
   def process
-    # your implementation
+    File.open('sample_text_1.txt', 'r') { |file| yield(file.read) }
   end
 end
 
 analyzer = TextAnalyzer.new
-analyzer.process { # your implementation }
-analyzer.process { # your implementation }
-analyzer.process { # your implementation }
+analyzer.process { |text| puts "#{text.split("\n\n").count} paragraphs" }
+analyzer.process { |text| puts "#{text.split("\n").count} lines" }
+analyzer.process { |text| puts "#{text.split(' ').count} words" }
 
 # Sample Output:
 

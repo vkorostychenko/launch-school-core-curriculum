@@ -27,15 +27,3 @@
 # The method should yield the contents of the array to a block, which should
 # assign your block parameters in such a way that it ignores the first two
 # elements, and groups all remaining elements as a raptors array.
-
-def a_method(array)
-  yield(*array)
-end
-
-a = [1, 2, 3, 4, 5]
-
-a_method(a) do |first, second, *rest|
-  puts "First: #{first}"
-  puts "Second: #{second}"
-  puts "Rest: #{rest}"
-end

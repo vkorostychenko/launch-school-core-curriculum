@@ -8,3 +8,30 @@
 # Once you have done so, see what happens if you print 3 more factorials.
 # Now, reset your Enumerator (use the rewind method). Finally, print 7 more
 # factorials.
+
+factorial = Enumerator.new do |yielder|
+  number = 0
+  fact_number = 1
+  loop do
+    fact_number = number.zero? ? 1 : fact_number * number
+    yielder << fact_number
+    number += 1
+  end
+end
+
+# External iterators
+
+6.times { |number| puts "#{number}! == #{factorial.next}" }
+puts "=========================="
+6.times { |number| puts "#{number}! == #{factorial.next}" }
+puts "=========================="
+factorial.rewind
+6.times { |number| puts "#{number}! == #{factorial.next}" }
+puts "=========================="
+
+# Internal iterators
+
+factorial.each_with_index do |value, number|
+  puts "#{number}! == #{value}"
+  break if number >= 5
+end

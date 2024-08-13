@@ -25,4 +25,14 @@ class CashRegisterTest < Minitest::Test
     expected_change = transaction.amount_paid - transaction.item_cost
     assert_equal expected_change, register.change(transaction)
   end
+
+  def test_give_receipt
+    # expected = <<~OUTPUT.chomp
+    #   You've paid $#{transaction.item_cost}.
+
+    # OUTPUT
+    expected = "You've paid $#{transaction.item_cost}.\n"
+
+    assert_output(expected) { register.give_receipt(transaction) }
+  end
 end

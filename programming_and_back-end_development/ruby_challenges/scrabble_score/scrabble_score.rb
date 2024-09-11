@@ -29,3 +29,38 @@
 # => 3 + 2 + 6 + 3
 # => 5 + 9
 # => 14
+
+class Scrabble
+  attr_reader :word
+
+  def initialize(word)
+    @word = word ? word : ''
+  end
+
+  def self.score(word)
+    Scrabble.new(word).score
+  end
+
+  def score
+    total = 0
+    word.each_char do |c|
+      total += letter_score(c)
+    end
+    total
+  end
+
+  private
+
+  def letter_score(letter)
+    case letter
+    when /[AEIOULNRST]/i then 1
+    when /[DG]/i         then 2
+    when /[BCMP]/i       then 3
+    when /[FHVWY]/i      then 4
+    when /K/i            then 5
+    when /[JX]/i         then 8
+    when /[QZ]/i         then 10
+    else                      0
+    end
+  end
+end

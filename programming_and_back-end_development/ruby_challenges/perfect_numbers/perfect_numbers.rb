@@ -18,3 +18,41 @@
 # Prime numbers 7, 13, etc. are always deficient since their only divisor is 1.
 
 # Write a program that can tell whether a number is perfect, abundant, or deficient.
+
+=begin
+- Find divisors of a given number
+  - create an empty array to store found divisors
+  - iterate over numbers from 1 upto the given number
+  - divide the number by the current potential divisor
+  - if the reminder of the division is equal to 0, that means that the current potential divisor is a divisor
+  - add the divisor to the list of divisors
+- Find the sum of the divisors
+- Return an appropriate classification for a number
+=end
+
+class PerfectNumber
+  attr_reader :number
+
+  def initialize(number)
+    raise StandardError if number.negative?
+    @number = number
+  end
+
+  def self.classify(number)
+    PerfectNumber.new(number).classify
+  end
+
+  def classify
+    aliquot_sum = (1...number).select do |divisor|
+      number % divisor == 0
+    end.sum
+
+    if aliquot_sum == number
+      'perfect'
+    elsif aliquot_sum > number
+      'abundant'
+    else
+      'deficient'
+    end
+  end
+end

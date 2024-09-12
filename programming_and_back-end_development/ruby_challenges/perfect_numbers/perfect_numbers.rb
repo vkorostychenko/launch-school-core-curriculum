@@ -30,21 +30,12 @@
 - Return an appropriate classification for a number
 =end
 
-class PerfectNumber
-  attr_reader :number
-
-  def initialize(number)
-    raise StandardError if number.negative?
-    @number = number
-  end
-
+class PerfectNumber  
   def self.classify(number)
-    PerfectNumber.new(number).classify
-  end
+    raise StandardError.new('Must be a positive interger') if number.negative?
 
-  def classify
-    aliquot_sum = (1...number).select do |divisor|
-      number % divisor == 0
+    aliquot_sum = (1..number / 2).select do |potential_divisor| # Evaluating numbers that are more than half of the original number is unnecessary since they can't be divisors.
+      number % potential_divisor == 0
     end.sum
 
     if aliquot_sum == number

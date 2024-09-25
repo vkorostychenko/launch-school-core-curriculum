@@ -13,3 +13,16 @@
 #     1234
 
 # Finally, if you ask for a 6-digit series from a 5-digit string, you should throw an error.
+
+class Series
+  attr_reader :number
+
+  def initialize(str)
+    @number = str
+  end
+
+  def slices(length)
+    raise ArgumentError if length > number.length
+    number.chars.map(&:to_i).each_cons(length).to_a
+  end
+end

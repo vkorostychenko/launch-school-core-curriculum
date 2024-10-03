@@ -28,12 +28,56 @@
 
 # Diamond for letter 'E':
 
-#     A
-#    B B
-#   C   C
-#  D     D
+#     A    
+#    B B   
+#   C   C  
+#  D     D 
 # E       E
-#  D     D
-#   C   C
-#    B B
-#     A
+#  D     D 
+#   C   C  
+#    B B   
+#     A    
+
+# "...A..." 0 spaces
+# "..B.B.." 1
+# ".C...C." 3
+# "D.....D" 5 main raw == width
+# ".C...C." 3
+# "..B.B.." 1
+# "...A..." 0
+
+class Diamond
+  ALPHABET = ('A'..'Z').to_a
+
+  def self.make_diamond(letter)
+    range = ('A'..letter).to_a + ('A'...letter).to_a.reverse
+    width = number_of_spaces(range.max) + 2
+
+    return "#{letter}\n" if range.one? # for letter 'A'
+
+    range.each_with_object([]) do |current_letter, array|
+      row = build_row(current_letter).center(width)
+      array << row
+    end.join("\n") + "\n"
+  end
+
+  class << self
+    private
+
+    def number_of_spaces(letter)
+      index = ALPHABET.index(letter.upcase)
+      return 0 if index.zero?
+
+      (index * 2) - 1
+    end
+
+    def build_row(letter)
+      if letter == 'A'
+        letter
+      else
+        spaces_between = ' ' * number_of_spaces(letter)
+        "#{letter}#{spaces_between}#{letter}"
+      end
+    end
+  end
+end
